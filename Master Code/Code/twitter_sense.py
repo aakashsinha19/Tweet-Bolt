@@ -98,16 +98,16 @@ def main():
     # printing first 5 positive tweets
     print("\n\nPositive tweets:\n")
     for tweet in ptweets[:10]:
-        print(tweet['text'])
+        print(tweet['text']).encode('utf-8')
  
     # printing first 5 negative tweets
     print("\n\nNegative tweets:\n")
     for tweet in ntweets[:10]:
-        print(tweet['text'])
+        print(tweet['text']).encode('utf-8')
 
     print("\n\nNeutral tweets:\n")
     for tweet in tweets[:10]:
-        print(tweet['text'])
+        print(tweet['text']).encode('utf-8')
  
 if __name__ == "__main__":
     # calling main function
