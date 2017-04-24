@@ -90,11 +90,11 @@
 </head>
 <body>
     <div class="bg">
-        
-        <form action="twitter_sense_v2.py">
+
+        <form>
         <p class="header">Twitter Sentiment Analysis</p>
-        <input type="text" class="query" placeholder="Enter query phrase">
-        <input class="button" type="submit" value="Submit">
+        <input type="text" id = "userInput" class="query" placeholder="Enter query phrase" >
+        <input class="button" onclick = "httpGet()" value="Submit">
         </form>
 
     <footer>
@@ -116,4 +116,18 @@
     </div>
 
 </body>
+<script>
+
+function httpGet()
+{
+    var q = document.getElementById('userInput').value;
+    console.log(q);
+    theUrl = "http://0.0.0.0:8080/?q="+q;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+</script>
 </html>
