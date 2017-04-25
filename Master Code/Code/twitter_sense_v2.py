@@ -1,5 +1,6 @@
 import re
 import tweepy
+import nltk
 from tweepy import OAuthHandler
 from textblob import TextBlob
  
@@ -41,7 +42,7 @@ class TwitterClient(object):
         else:
             return 'negative'
  
-    def get_tweets(self, query, count = 10):   
+    def get_tweets(self, query, count):   
         # Main function to fetch tweets and parse them.
         # empty list to store parsed tweets
         tweets = []
@@ -72,10 +73,12 @@ class TwitterClient(object):
             # print error (if any)
             print("Error : " + str(e))
  
-def main():
+def main(queryTweet):
 
-    queryTweet = input()
-    countLimit = input()
+    #countLimit = input()
+    countLimit = 25	
+
+    result = ""    
 
     # creating object of TwitterClient Class
     api = TwitterClient()
@@ -85,36 +88,55 @@ def main():
     # picking positive tweets from tweets
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     # percentage of positive tweets
-    print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
+    #print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
+    result = result + "Positive tweets percentage: {} %\n".format(100*len(ptweets)/len(tweets))
     # picking negative tweets from tweets
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
     # percentage of negative tweets
-    print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
+    #print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
+    result = result + "\nNegative tweets percentage: {} %\n".format(100*len(ntweets)/len(tweets))
     # percentage of neutral tweets
     neutraltweets = [tweet for tweet in tweets if tweet['sentiment'] == 'neutral']
-    print("Neutral tweets percentage: {} %".format(100*len(neutraltweets)/len(tweets)))
-
-    print("\nTotal Tweets = " + str(len(tweets)))
+    result = result + "\nNeutral Tweets percentage: {} %\n".format(100*len(neutraltweets)/len(tweets))
+    #print("Neutral tweets percentage: {} %".format(100*len(neutraltweets)/len(tweets)))
+    #result = result + "\nTotal Tweets = " + str(len(tweets))
+    #print("\nTotal Tweets = " + str(len(tweets)))
 
     tweetNumber = 1
     # printing first 5 positive tweets
-    print("\n\nPositive tweets:\n")
+    #print("\n\nPositive tweets:\n")
+    result = result + "\nPositive tweets:\n"
     for tweet in ptweets[:10]:
-        print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
+        result = result  +  (str(tweetNumber) + " " + tweet['text'] + "\n\n").encode('utf-8')
+		#print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
 	tweetNumber = tweetNumber + 1
  
     tweetNumber = 1
     # printing first 5 negative tweets
-    print("\n\nNegative tweets:\n")
+    result = result + "\n\nNegative tweets:\n"    
+	#print("\n\nNegative tweets:\n")
     for tweet in ntweets[:10]:
-        print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
+        result = result  + (str(tweetNumber) + " " + tweet['text'] + "\n\n").encode('utf-8')
+        #print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
 	tweetNumber = tweetNumber + 1
 
     tweetNumber = 1
-    print("\n\nNeutral tweets:\n")
+    result = result + "\n\nNeutral tweets:\n"
+    #print("\n\nNeutral tweets:\n")
     for tweet in neutraltweets[:10]:
-        print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
+        result = result  +  (str(tweetNumber) + " " + tweet['text'] + "\n\n").encode('utf-8')
+        #print(str(tweetNumber) + " " + tweet['text']).encode('utf-8')
 	tweetNumber = tweetNumber + 1
+
+    #opening file
+    targetFile = open("result.txt", 'w')
+    #truncating file    
+    targetFile.truncate()
+    #Writing to file
+    targetFile.write(result)
+    #closing file    
+    targetFile.close()
+    return
  
 if __name__ == "__main__":
     # calling main function
